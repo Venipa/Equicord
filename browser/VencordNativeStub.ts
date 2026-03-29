@@ -19,9 +19,9 @@
 /// <reference path="../src/modules.d.ts" />
 /// <reference path="../src/globals.d.ts" />
 
+import monacoHtmlLocal from "file://monacoWin.html?minify";
 // Be very careful with imports in this file to avoid circular dependency issues.
 // Only import pure modules that don't import other parts of Vencord.
-import monacoHtmlLocal from "file://monacoWin.html?minify";
 import * as DataStore from "@api/DataStore";
 import type { Settings } from "@api/Settings";
 import { debounce } from "@shared/debounce";
@@ -37,7 +37,7 @@ const NOOP_ASYNC = async () => { };
 const setCssDebounced = debounce((css: string) => VencordNative.quickCss.set(css));
 
 const themeStore = DataStore.createStore("VencordThemes", "VencordThemeData");
-
+const remote = process.env.EQUICORD_REMOTE ?? "Equicord/Equicord";
 // probably should make this less cursed at some point
 window.VencordNative = {
     themes: {
@@ -70,7 +70,7 @@ window.VencordNative = {
     },
 
     updater: {
-        getRepo: async () => ({ ok: true, value: "https://github.com/Equicord/Equicord" }),
+        getRepo: async () => ({ ok: true, value: `https://github.com/${remote}` }),
         getUpdates: async () => ({ ok: true, value: [] }),
         update: async () => ({ ok: true, value: false }),
         rebuild: async () => ({ ok: true, value: true }),
