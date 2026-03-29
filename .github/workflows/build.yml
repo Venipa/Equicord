@@ -1,8 +1,8 @@
 name: Release
 on:
     push:
-        branches:
-            - main
+        tags:
+            - v*.*.*.*
 
 env:
     FORCE_COLOR: true
@@ -29,6 +29,12 @@ jobs:
               with:
                   node-version: 20
                   cache: "pnpm"
+            - name: Set package.json version to match tag
+              run: |
+                  TAG_VER="${{ github.ref_name }}"
+                  # Remove the leading 'v' if present
+                  VERSION="${TAG_VER#v}"
+                  jq --arg v "$VERSION" '.version = $v' package.json > package.tmp.json && mv package.tmp.json package.json
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
