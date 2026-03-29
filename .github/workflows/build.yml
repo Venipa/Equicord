@@ -10,6 +10,7 @@ env:
     REPO: ${{ github.repository }}
     USERNAME: GitHub-Actions
     EQUICORD_REMOTE: ${{ github.repository }}
+    RELEASE_TAG: ${{ github.ref_name }}
 
 permissions:
     contents: write
@@ -76,7 +77,8 @@ jobs:
 
             - name: Upload Equicord Stable
               run: |
-                  gh release upload latest --clobber dist/release/*
+                  echo "Uploading release ${{ env.RELEASE_TAG }}"
+                  gh release upload ${{ env.RELEASE_TAG }} --clobber dist/release/*
 
             # - name: Upload Plugin JSONs to Equibored repo
             #   run: |
